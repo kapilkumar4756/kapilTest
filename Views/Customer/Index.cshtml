@@ -1,0 +1,94 @@
+﻿@model List<Jason_CRUD.Models.Customers>
+@{
+    ViewBag.Title = "Customer";
+}
+
+<h2>Customer</h2>
+<div class="row p-4">
+    <div class="col-md-6 text-left">
+        @if (ViewBag.Msg != null)
+        {
+            string message = ViewBag.Msg;
+            var classname = "alert-danger";
+            if (message.Contains("Success"))
+            {
+                classname = "alert-success";
+            }
+            <div class="alert @classname">
+                <span>@ViewBag.Msg.ToString()</span>
+            </div>
+        }
+    </div>
+    <div class="col-md-6 text-right">
+        <a class="btn btn-primary" onclick="EditCustomer('')"><i class="fa fa-plus"></i>&emsp; Add new Customer</a>
+    </div>
+</div>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped datatable">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Email</td>
+                    <td>
+                        <a onclick="EditCustomer('@item.Id')"><i class="fa fa-2x fa-pencil-square"></i></a>
+                        @using (Html.BeginForm("Delete", "Customer", new { id = item.Id }, FormMethod.Post, new { id = "deleteform_" + item.Id }))
+                        {
+                            <a href="javascript:document.getElementById('deleteform_@item.Id').submit()" style="color:#000;"><i class="fa fa-trash  "></i></a>
+                            @Html.AntiForgeryToken();
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Modal -->
+<div id="customerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add/Edit Customer</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="dv_CustomerDetails"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function EditCustomer(id) {
+        var url = "@Url.Action("GetCustomerDetails","Customer")";
+        url += "?Id=" + id;
+        $.ajax({
+            url: url,
+            method: "POST",
+            data: { Id: id },
+            dataType: "json",
+            success: function (result) {
+                $("#dv_CustomerDetails").html('');
+                $("#dv_CustomerDetails").html(result.html);
+                $("#customerModal").modal('show');
+            }, error: function (xhr) {
+                DisplayErrorMessage("Something went wrong. Please try again later.");
+            }
+        });
+    }
+</script>

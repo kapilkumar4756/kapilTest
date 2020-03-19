@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+        $(document).ready(function () {
+            $('.datatable').DataTable({
+                "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [-1] },
+                    { "bSearchable": false, "aTargets": [-1] }
+                ]
+            });
+        });
+    </script>
+    <style>
+
+
+        .w-100 {
+            width: 100% !important;
+        }
+
+        .p-0 {
+            padding: 0px !important;
+        }
+
+        .p-1 {
+            padding: 0.25em !important;
+        }
+
+        .p-2 {
+            padding: 0.50em !important;
+        }
+
+        .p-3 {
+            padding: 0.75em !important;
+        }
+
+        .p-4 {
+            padding: 1em !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("CRUD Operations", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                        <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
+                    }
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

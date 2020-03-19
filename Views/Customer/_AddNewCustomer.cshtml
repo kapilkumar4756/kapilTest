@@ -1,0 +1,38 @@
+﻿@model Jason_CRUD.ViewModel.CustomerViewModel
+@if (Model != null)
+{
+    if (Model != null && !string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-success">
+            @Model.Message
+        </div>
+    }
+    using (Html.BeginForm("Index", "Customer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group form-inline">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-4">
+                @Html.HiddenFor(m => m.Id)
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-inline">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group ">
+            <div class="col-md-offset-2 col-md-12 text-center">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </div>
+    }
+
+}
